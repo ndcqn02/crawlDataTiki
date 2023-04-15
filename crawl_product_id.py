@@ -2,7 +2,10 @@ import requests
 import time
 import random
 import pandas as pd
+from sqlalchemy import create_engine
+# pip install sqlalchemy==1.4.46
 
+engine = create_engine('mysql+pymysql://root:root@localhost/tiki')
 # cookies = {
 #     'TIKI_GUEST_TOKEN': '8jWSuIDBb2NGVzr6hsUZXpkP1FRin7lY',
 #     'TOKENS': '{%22access_token%22:%228jWSuIDBb2NGVzr6hsUZXpkP1FRin7lY%22%2C%22expires_in%22:157680000%2C%22expires_at%22:1763654224277%2C%22guest_token%22:%228jWSuIDBb2NGVzr6hsUZXpkP1FRin7lY%22}',
@@ -63,17 +66,43 @@ params = {
     'src': 'c1883',
     'urlKey':  'nha-cua-doi-song',
 }
-
-product_id = []
+def parser_product(json):
+    d = dict()
+    d['id'] = json.get('id')
+    d['sku'] = json.get('sku')
+    d['name'] = json.get('name')
+    d['url_key'] = json.get('url_key')
+    d['url_path'] = json.get('url_path')
+    d['availability'] = json.get('availability')
+    d['seller_id'] = json.get('seller_id')
+    d['seller_name'] = json.get('seller_name')
+    d['price'] = json.get('price')
+    d['original_price'] = json.get('original_price')
+    d['discount'] = json.get('discount')
+    d['discount_rate'] = json.get('discount_rate')
+    d['review_count'] = json.get('review_count')
+    d['rating_average'] = json.get('rating_average')
+    d['primary_category_path'] = json.get('primary_category_path')
+    d['primary_category_name'] = json.get('primary_category_name')
+    d['productset_id'] = json.get('productset_id')
+    d['thumbnail_url'] = json.get('thumbnail_url')
+    d['seller_product_id'] = json.get('seller_product_id')
+    d['video_url'] = json.get('video_url')
+    return d
+result = []
 for i in range(1, 11):
-    print('tao ne')
+    print(i)
     params['page'] = i
-    response = requests.get('https://tiki.vn/api/v2/products', headers=headers, params=params)#, cookies=cookies)
+    response = requests.get('https://tiki.vn/api/v2/products', headers=headers, params=params)
     if response.status_code == 200:
         print('request success!!!')
         for record in response.json().get('data'):
-            product_id.append({'id': record.get('id')})
-    time.sleep(random.randrange(3, 10))
+            print(record)
+            result.append(parser_product(record))
 
-df = pd.DataFrame(product_id)
+df = pd.DataFrame(result)
 df.to_csv('product_id_ncds.csv', index=False)
+df_product = pd.DataFrame(result)
+df_product.to_csv('crawled_data_ncds.csv', index=False)
+df_product.to_sql('product', con = engine, if_exists = 'replace', index=False)
+print('ghi du lieu thanh cong')
