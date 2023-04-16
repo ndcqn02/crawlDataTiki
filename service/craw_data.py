@@ -37,4 +37,4 @@ def craw_data(link_api,page,params,headers):
         for record in response.json().get('data'):
             result = parser_product(record)
             # print(type(parser_product(record)))
-    return result;
+    return result
