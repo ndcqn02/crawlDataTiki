@@ -1,6 +1,6 @@
 host = '127.0.0.1'
 user_name = "root"
-password = "root"
+password = "12345"
 database = "tiki"
 port = '3306'
 link_api='https://tiki.vn/api/v2/products'

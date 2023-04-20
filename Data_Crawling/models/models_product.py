@@ -21,3 +21,9 @@ class Product(BaseModel):
     seller_product_id = 0
     thumbnail_url =''
     video_url =''
+
+
+class Product2(BaseModel):
+    id = 123
+    sku = 'HKd1'
+    name = 'hehe'
