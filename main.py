@@ -1,4 +1,3 @@
-
 import sys
 import pandas as pd
 sys.path.append('Data_Crawling/models')
@@ -11,25 +10,22 @@ app_craw = FastAPI()
 
 @app_craw.get("/craw-product")
 async def craw_product():
-    result = []
-    if(HTTPException(200)):
-        for i in range(1, 50):
-            result.append(craw_data.craw_data(until_data.link_api, i,
-                    until_data.params, until_data.headers))
+    try:
+        result = craw_data.craw_data(until_data.link_api,
+                until_data.params, until_data.headers)
         return {
             "status": '200',
             'message':'success',
             'data' : result
         }
-    else:
+    except Exception as e:
         return {
-            "status": '400',
-            'message':HTTPException(400),
-            'data' : result
+            "status": '500',
+            'message': str(e),
         }
 
 @app_craw.get("/search")
-async def search_data(product_name: str):
+async def search_data(product_name:str):
     if(HTTPException(200)):
         result = craw_data.search_data(product_name)
         return {
