@@ -1,7 +1,5 @@
 import requests
 import time
-import random
-import pandas as pd
 import importlib.util
 import sys
 sys.path.append("../models")
@@ -40,18 +38,23 @@ def craw_data(link_api,params,headers):
         response = requests.get(link_api,headers=headers, params=params)
         for record in response.json().get('data'):
             product = parser_product(record)
-            print('request success1!!!')
-            database_api.craw_product(product)
+            check = database_api.find_by_id(product.id_product)
+            if(check != None):
+                database_api.update_product(product)
+                print("update")
+            else:
+                database_api.insert_product(product)
+                print("insert")
             result.append(product)
-        print('request success2!!!')
-    print('request success3!!!')
-    print(result)
+    # print(result)
     return result
 def search_data(product_name):
         return database_api.search_product(product_name)
 def update_product(product):
         return database_api.update_product(product)
         
-def delete_product(id):
-    return database_api.delete_product(id)
+def delete_product(product_id):
+    return database_api.delete_product(product_id)
+def find_by_id(product_id):
+    return database_api.find_by_id(product_id)
 

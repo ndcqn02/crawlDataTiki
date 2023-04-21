@@ -21,3 +21,7 @@ class Product(BaseModel):
     seller_product_id = 0
     thumbnail_url =''
     video_url =''
+class Time_run(BaseModel):
+    hour = 0
+    minute = 0
+    second = 0
