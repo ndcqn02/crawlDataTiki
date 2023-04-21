@@ -1,36 +1,63 @@
 import sys
 from mysql import connector
 sys.path.append("../Data_Crawling/models")
-import until_data
 from models_product import Product
+import until_data
 mydb=connector.connect(user=until_data.user_name, password=until_data.password,port=until_data.port,host=until_data.host,database=until_data.database)
-def craw_product(product:Product):
+
+def find_by_id(product_id):
     cursor = mydb.cursor()
-    query = "insert into product (id_product,sku,name,url_key,url_path,availability,seller_id,seller_name,price,original_priceid,discount,discount_rate,review_count,rating_average,primary_category_path,primary_category_name,productset_id,seller_product_id,thumbnail_url,video_url) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-    cursor.execute(query,product)
-    result = cursor.fetchall()
+    query = "Select * FROM product WHERE id_product=%s"
+    cursor.execute(query, (product_id,))
+    result = cursor.fetchone();
+    cursor.close()
+    return result
+
+def insert_product(product: Product()):
+    cursor = mydb.cursor()
+    my_dict = product.__dict__
+    list_key = list(my_dict.keys())
+    columns = ", ".join(list_key)    
+    my_list = list(my_dict.values())
+    values_placeholders = ", ".join(["%s"] * len(my_list))
+    values_tuple = tuple(my_list)
+    query =  (f"INSERT INTO product ({columns})  VALUES ({values_placeholders})")
+    try:
+        cursor.execute(query,values_tuple)
+        mydb.commit()
+        result = cursor.fetchall()
+        cursor.close()
+    except:
+        mydb.rollback()
+        cursor.close()
     return result
     
-def search_product(product_name:str):
+def search_product(product_name):
     cursor = mydb.cursor()
-    query = "SELECT * FROM product WHERE name LIKE %s"
-    value = (f"%{product_name}%",)
-    cursor.execute(query, value)
+    query = "select * from product where product_name = %s"
+    cursor.execute(query, (product_name,))
     results = cursor.fetchall()
     return results
-def update_product(product:Product()):
+def update_product(product: Product()):
     cursor = mydb.cursor()
-    query = "UPDATE product SET name=%s WHERE id_product=%s"
-    cursor.execute(query, (name, product_id))
+    query = "UPDATE product SET id_product=%s, sku=%s, product_name=%s, url_key=%s ,url_path=%s, availability=%s ,seller_id=%s, seller_name=%s,price=%s, original_price=%s, discount=%s, discount_rate=%s, review_count=%s ,rating_average=%s ,primary_category_path=%s ,primary_category_name=%s, productset_id=%s ,seller_product_id=%s ,thumbnail_url=%s ,video_url=%s  WHERE id_product=%s"
+    my_dict = product.__dict__
+    my_list = list(my_dict.values())
+    id_product= my_list[0]
+    value = my_list.append(id_product)
+    values_tuple = tuple(my_list)
+    values_tuple = tuple(my_list)
+    result=[]
+    cursor.execute(query ,values_tuple)
     result = cursor.fetchall()
     mydb.commit()
     cursor.close()
+    print(result)
     return result
-def delete_product(id):
+
+def delete_product(product_id):
     cursor = mydb.cursor()
     query = "DELETE FROM product WHERE id_product=%s"
-    cursor.execute(query, product_id)
-    result = cursor.fetchall()
+    cursor.execute(query, (product_id,))
     mydb.commit()
     cursor.close()
-    return result
