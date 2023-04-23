@@ -17,9 +17,10 @@
   - Password: root
   - Table: product
   
-## Test db
+## Check at database
   - `docker exec -ti containerID mysql -u root -p`
     - Enter password
   - `show databases;`
   -  `use database_name;`
+    -`slect * from product`
   -  `show tables;`
