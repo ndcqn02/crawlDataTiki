@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pandas
+requests
+schedule
+mysql-connector-python==8.0.26

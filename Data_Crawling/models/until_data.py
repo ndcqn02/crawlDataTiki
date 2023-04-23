@@ -1,4 +1,4 @@
-host = '127.0.0.1'
+host = 'mysql'
 user_name = "root"
 password = "root"
 database = "tiki"

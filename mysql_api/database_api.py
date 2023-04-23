@@ -4,6 +4,7 @@ sys.path.append("../Data_Crawling/models")
 from models_product import Product
 import until_data
 mydb=connector.connect(user=until_data.user_name, password=until_data.password,port=until_data.port,host=until_data.host,database=until_data.database)
+print('KET NOI THANH CONG')
 
 def find_by_id(product_id):
     cursor = mydb.cursor()
@@ -29,12 +30,15 @@ def insert_product(product: Product()):
     values_placeholders = ", ".join(["%s"] * len(my_list))
     values_tuple = tuple(my_list)
     query =  (f"INSERT INTO product ({columns})  VALUES ({values_placeholders})")
+    result = []
     try:
         cursor.execute(query,values_tuple)
         mydb.commit()
+        print('insert successfully!')
         result = cursor.fetchall()
         cursor.close()
-    except:
+    except Exception as e:
+        print(e)
         mydb.rollback()
         cursor.close()
     return result
