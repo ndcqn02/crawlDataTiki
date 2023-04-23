@@ -21,6 +21,6 @@
   - `docker exec -ti containerID mysql -u root -p`
     - Enter password
   - `show databases;`
-  -  `use database_name;`
-    -`slect * from product`
+  -  `use tiki;`
+     + `select * from product;`
   -  `show tables;`
