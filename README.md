@@ -1,14 +1,11 @@
 <h2>crawlDataTiki </h2>
 
-### AUTO API
-  - Turn on docker
-  - Run `Docker compose up -d` 
 
-## how to use
+## How to use
 - ### Turn on Docker app
-  
-  -Back to terminal and use command line:
-      - `docker-compose up -d`
+
+  - Back to terminal and use command line:
+     </br> - `docker-compose up -d`
      </br> - `docker-compose up -d`
  
 - ### Test api
@@ -21,8 +18,8 @@
   - Table: product
   
 ## Test db
-  - docker exec -ti containerID mysql -u root -p
+  - `docker exec -ti containerID mysql -u root -p`
     - Enter password
-  - show databases;
-  -  use database_name;
-  -  show tables;
+  - `show databases;`
+  -  `use database_name;`
+  -  `show tables;`
