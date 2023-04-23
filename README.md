@@ -9,7 +9,7 @@
   
   -Back to terminal and use command line:
       - `docker-compose up -d`
-      - `docker-compose up -d`
+     </br> - `docker-compose up -d`
  
 - ### Test api
   - in browser go to http://127.0.0.1:8000/docs
