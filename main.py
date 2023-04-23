@@ -1,16 +1,16 @@
 import sys
-import pandas as pd
+import datetime
+import time
 sys.path.append('Data_Crawling/models')
 sys.path.append('Data_Crawling/service')
 import craw_data 
 import until_data
-import schedule
 from models_product import *
 from fastapi import FastAPI, HTTPException
 
 app_craw = FastAPI()
 
-@app_craw.get("/craw-product")
+@app_craw.post("/craw-product")
 async def craw_product():
     try:
         result = craw_data.craw_data(until_data.link_api,
@@ -65,9 +65,35 @@ async def delete_data(product_id):
             }
     except Exception as e:
         return {"error": str(e)}
-# @app_craw.get("/craw_by_time")
-# async def craw_by_time(time_run : Time_run()):
-#     craw= schedule.every().day.at("{time_run.hour}:{minute}:{second}").do(craw_data.craw_data(until_data.link_api,
-#                 until_data.params, until_data.headers))
-#     schedule.cancel_job(craw)
+@app_craw.get("/product")
+async def getAll():
+    try:
+        result = craw_data.getAll()
+        return  {
+                "status" : "200",
+                "message": "get all product",
+                "data" : result
+                }  
+    except Exception as e:
+         {
+                "status" : "500",
+                "message": "err"+str(e),
+                } 
+# @app_craw.post("/craw_by_time")
+# async def craw_by_time(time_run : Time_run):
+#     time = datetime.datetime.now().time()
 
+#     while ():
+#         try:
+#             result = craw_data.craw_data(until_data.link_api,
+#                 until_data.params, until_data.headers)
+#             return {
+#                 "status": '200',
+#                 'message':'success',
+#                 'data' : result
+#             }
+#         except Exception as e:
+#             return {
+#                 "status": '500',
+#                 'message': str(e),
+#                 }

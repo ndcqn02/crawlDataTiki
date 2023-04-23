@@ -9,7 +9,14 @@ def find_by_id(product_id):
     cursor = mydb.cursor()
     query = "Select * FROM product WHERE id_product=%s"
     cursor.execute(query, (product_id,))
-    result = cursor.fetchone();
+    result = cursor.fetchone()
+    cursor.close()
+    return result
+def getAll():
+    cursor = mydb.cursor()
+    query = "select * from product"
+    cursor.execute(query)
+    result = cursor.fetchall()
     cursor.close()
     return result
 
@@ -52,7 +59,6 @@ def update_product(product: Product()):
     result = cursor.fetchall()
     mydb.commit()
     cursor.close()
-    print(result)
     return result
 
 def delete_product(product_id):

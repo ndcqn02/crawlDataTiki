@@ -41,12 +41,9 @@ def craw_data(link_api,params,headers):
             check = database_api.find_by_id(product.id_product)
             if(check != None):
                 database_api.update_product(product)
-                print("update")
             else:
                 database_api.insert_product(product)
-                print("insert")
             result.append(product)
-    # print(result)
     return result
 def search_data(product_name):
         return database_api.search_product(product_name)
@@ -57,4 +54,5 @@ def delete_product(product_id):
     return database_api.delete_product(product_id)
 def find_by_id(product_id):
     return database_api.find_by_id(product_id)
-
+def getAll():
+    return database_api.getAll()
