@@ -39,18 +39,18 @@ def craw_data(link_api,params,headers):
         for record in response.json().get('data'):
             product = parser_product(record)
             check = database_api.find_by_id(product.id_product)
-            # if(check != None):
-            #     database_api.update_product(product)
-            # else:
-            #     database_api.insert_product(product)
-            database_api.insert_product(product)
+            if(check != None):
+                database_api.update_product(product)
+            else:
+                database_api.insert_product(product)
             result.append(product)
     return result
 def search_data(product_name):
         return database_api.search_product(product_name)
 def update_product(product):
         return database_api.update_product(product)
-        
+def insert_product(product):
+        return database_api.insert_product(product)
 def delete_product(product_id):
     return database_api.delete_product(product_id)
 def find_by_id(product_id):

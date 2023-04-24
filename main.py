@@ -26,10 +26,10 @@ async def craw_product():
             'message': str(e),
         }
 
-@app_craw.get("/search/{product_name}")
-async def search_data(product_name:str):
+@app_craw.get("/search/{category_name}")
+async def search_data(category_name:str):
     if(HTTPException(200)):
-        result = craw_data.search_data(product_name)
+        result = craw_data.search_data(category_name)
         return {
             'status' : '200',
             'message' : 'success',
@@ -75,25 +75,18 @@ async def getAll():
                 "data" : result
                 }  
     except Exception as e:
-         {
+        {
                 "status" : "500",
                 "message": "err"+str(e),
                 } 
-# @app_craw.post("/craw_by_time")
-# async def craw_by_time(time_run : Time_run):
-#     time = datetime.datetime.now().time()
-
-#     while ():
-#         try:
-#             result = craw_data.craw_data(until_data.link_api,
-#                 until_data.params, until_data.headers)
-#             return {
-#                 "status": '200',
-#                 'message':'success',
-#                 'data' : result
-#             }
-#         except Exception as e:
-#             return {
-#                 "status": '500',
-#                 'message': str(e),
-#                 }
+@app_craw.post("/insert_product")
+async def inset_product(product: Product):
+    try:
+        result = craw_data.insert_product(product)
+        return {
+            "status" : "200",
+            "message" : "insert product",
+            "data" : result
+        }
+    except Exception as e:
+        return {"err" : e}
