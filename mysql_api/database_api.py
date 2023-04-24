@@ -15,9 +15,10 @@ def find_by_id(product_id):
     return result
 def getAll():
     cursor = mydb.cursor()
-    query = "select * from product"
+    query = "select * FROM product"
     cursor.execute(query)
-    result = cursor.fetchall()
+    rows = cursor.fetchall()
+    result = convert(rows)
     cursor.close()
     return result
 
@@ -34,20 +35,20 @@ def insert_product(product: Product()):
     try:
         cursor.execute(query,values_tuple)
         mydb.commit()
-        print('insert successfully!')
-        result = cursor.fetchall()
         cursor.close()
+        print('insert successfully!')
     except Exception as e:
         print(e)
         mydb.rollback()
         cursor.close()
-    return result
+    return product
     
-def search_product(product_name):
+def search_product(category_name):
     cursor = mydb.cursor()
-    query = "select * from product where product_name = %s"
-    cursor.execute(query, (product_name,))
-    results = cursor.fetchall()
+    query = "select * from product where  primary_category_name = %s"
+    cursor.execute(query, (category_name,))
+    rows = cursor.fetchall()
+    results = convert(rows)
     return results
 def update_product(product: Product()):
     cursor = mydb.cursor()
@@ -60,10 +61,10 @@ def update_product(product: Product()):
     values_tuple = tuple(my_list)
     result=[]
     cursor.execute(query ,values_tuple)
-    result = cursor.fetchall()
     mydb.commit()
     cursor.close()
-    return result
+    print("update success")
+    return product
 
 def delete_product(product_id):
     cursor = mydb.cursor()
@@ -71,3 +72,30 @@ def delete_product(product_id):
     cursor.execute(query, (product_id,))
     mydb.commit()
     cursor.close()
+
+def convert(rows):
+    data= []
+    for row in rows:
+        product = Product()
+        product.id_product = row[0]
+        product.sku =row[1]
+        product.product_name = row[2]
+        product.url_key = row[3]
+        product.url_path = row[4]
+        product.availability = row[5]
+        product.seller_id = row[6]
+        product.seller_name= row[7]
+        product.price = row[8]
+        product.original_price = row[9]
+        product.discount = row[10]
+        product.discount_rate = row[11]
+        product.review_count = row[12]
+        product.rating_average = row[13]
+        product.primary_category_path = row[14]
+        product.primary_category_name =row[15]
+        product.productset_id= row[16]
+        product.seller_product_id = row[17]
+        product.thumbnail_url = row[18]
+        product.video_url =row[19]
+        data.append(product)
+    return data
